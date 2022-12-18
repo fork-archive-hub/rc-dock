@@ -232,117 +232,85 @@ LazyPromise.prototype.catch = function (onError) {
   if (this.promise === null) this.promise = new Promise(this.executor);
   return this.promise.catch(onError);
 };
-},{"./bundle-url":"CSru"}],"SvKR":[function(require,module,exports) {
+},{"./bundle-url":"CSru"}],"azT7":[function(require,module,exports) {
 require("_bundle_loader")(require.resolve('./shared-import')).then(({
   React,
   ReactDOM,
   jsxTab,
   htmlTab,
   DockLayout,
-  DockContextType
+  DragDropDiv
 }) => {
   let tab = {
-    content: /*#__PURE__*/React.createElement("div", null, "Tab Content"),
-    closable: true
+    title: 'Tab',
+    content: /*#__PURE__*/React.createElement("div", null, "Tab Content")
   };
-  let layout = {
+  let box = {
     dockbox: {
       mode: 'horizontal',
       children: [{
         mode: 'vertical',
-        size: 200,
         children: [{
-          tabs: [{ ...tab,
-            id: 't1',
-            title: 'Tab 1'
-          }, { ...tab,
-            id: 't2',
-            title: 'Tab 2'
-          }]
+          tabs: [jsxTab, htmlTab]
         }, {
           tabs: [{ ...tab,
-            id: 't3',
-            title: 'Min Size',
-            content: /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "This tab has a minimal size"), "150 x 150 px"),
-            minWidth: 150,
-            minHeight: 150
+            id: 't4'
           }, { ...tab,
-            id: 't4',
-            title: 'Tab 4'
+            id: 't5'
+          }, { ...tab,
+            id: 't6'
           }]
         }]
       }, {
-        size: 1000,
         tabs: [{ ...tab,
-          id: 't5',
-          title: 'basic demo',
-          content: /*#__PURE__*/React.createElement("div", null, "This panel won't be removed from layout even when last Tab is closed")
-        }, jsxTab, htmlTab],
-        panelLock: {
-          panelStyle: 'main'
-        }
-      }, {
-        size: 200,
-        tabs: [{ ...tab,
-          id: 't8',
-          title: 'Tab 8'
-        }]
-      }]
-    },
-    floatbox: {
-      mode: 'float',
-      children: [{
-        tabs: [{ ...tab,
-          id: 't9',
-          title: 'Tab 9',
-          content: /*#__PURE__*/React.createElement("div", null, "Float")
+          id: 't7'
         }, { ...tab,
-          id: 't10',
-          title: 'Tab 10'
-        }],
-        x: 300,
-        y: 150,
-        w: 400,
-        h: 300
+          id: 't8'
+        }, { ...tab,
+          id: 't9'
+        }]
       }]
     }
   };
 
-  if (window.innerWidth < 600) {
-    // remove a column for mobile
-    layout.dockbox.children.pop();
-  }
-
-  let count = 0;
-
   class Demo extends React.Component {
-    onDragNewTab = e => {
-      let content = `New Tab ${count++}`;
-      DragStore.dragStart(DockContextType, {
-        tab: {
-          id: content,
-          content: /*#__PURE__*/React.createElement("div", {
-            style: {
-              padding: 20
-            }
-          }, content),
-          title: content,
-          closable: true
-        }
-      }, e.nativeEvent);
+    newTabId = 0;
+    getRef = r => {
+      this.dockLayout = r;
+    };
+    getButtonRef = r => {
+      this.buttonRef = r;
+    };
+    onDragStart = e => {
+      console.log(this.dockLayout, this.buttonRef);
+      e.setData({
+        tab: { ...tab,
+          id: `newTab-${++this.newTabId}`
+        },
+        panelSize: [400, 300]
+      }, this.dockLayout.getDockId());
+      e.startDrag(this.buttonRef.element, this.buttonRef.element);
     };
 
     render() {
-      return /*#__PURE__*/React.createElement(DockLayout, {
-        defaultLayout: layout,
+      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(DockLayout, {
+        ref: this.getRef,
+        defaultLayout: box,
         style: {
           position: 'absolute',
           left: 10,
-          top: 10,
+          top: 60,
           right: 10,
           bottom: 10
         }
-      });
+      }), /*#__PURE__*/React.createElement("div", {
+        className: "top-panel"
+      }, /*#__PURE__*/React.createElement(DragDropDiv, {
+        ref: this.getButtonRef,
+        onDragStartT: this.onDragStart
+      }, /*#__PURE__*/React.createElement("button", {
+        className: "btn"
+      }, "Drag Me to Create New Tab"))));
     }
 
   }
@@ -373,4 +341,4 @@ module.exports = function loadJSBundle(bundle) {
 };
 },{}],0:[function(require,module,exports) {
 var b=require("Cm3W");b.register("js",require("W28G"));
-},{}]},{},[0,"SvKR"], null)
+},{}]},{},[0,"azT7"], null)
